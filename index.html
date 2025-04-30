@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Responsive Grocery Website</title>
+
+    <!-- Swiper JS CSS CDN Link -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <!-- Font Awesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Using FontAwesome 5 as it's more current -->
+
+    <!-- Custom CSS File Link -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,500;0,600;1,100;1,300&display=swap');
+
+        :root{
+            --orange:#ff7800;
+            --black:#130f40;
+            --light-color:#666;
+            --box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1);
+            --border:.2rem solid rgba(0,0,0,.1);
+            --outline:.1rem solid rgba(0,0,0,.1);
+            --outline-hover:.2rem solid var(--black);
+        }
+
+        *{
+            font-family: 'Poppins', sans-serif;
+            margin:0; padding:0;
+            box-sizing: border-box;
+            outline: none; border:none;
+            text-decoration: none;
+            text-transform: capitalize;
+            transition: all .2s linear;
+        }
+
+        html{
+            font-size: 62.5%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            scroll-padding-top: 7rem;
+        }
+
+        body{
+            background:#eee;
+        }
+
+        section{
+            padding:2rem 9%;
+        }
+
+        .heading{
+            text-align: center;
+            padding:2rem 0;
+            padding-bottom: 3rem;
+            font-size: 3.5rem;
+            color:var(--black);
+        }
+
+        .heading span{
+            background: var(--orange);
+            color:#fff;
+            display: inline-block;
+            padding:.5rem 3rem;
+            clip-path: polygon(100% 0, 93% 50%, 100% 99%, 0% 100%, 7% 50%, 0% 0%);
+        }
+
+        .btn{
+            margin-top: 1rem;
+            display: inline-block;
+            padding:.8rem 3rem;
+            font-size: 1.7rem;
+            border-radius: .5rem;
+            border:.2rem solid var(--black);
+            color:var(--black);
+            cursor: pointer;
+            background: none;
+        }
+
+        .btn:hover{
+            background: var(--orange);
+            color:#fff;
+        }
+
+        /* Header styles */
+        .header{
+            position: fixed;
+            top:0; left:0; right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding:2rem 9%;
+            background:#fff;
+            box-shadow: var(--box-shadow);
+        }
+
+        .header .logo{
+            font-size: 2.5rem;
+            font-weight: bolder;
+            color:var(--black);
+        }
+
+        .header .logo i{
+            color:var(--orange);
+        }
+
+        .header .navbar a{
+            font-size: 1.7rem;
+            margin:0 1rem;
+            color:var(--black);
+        }
+
+        .header .navbar a:hover{
+            color:var(--orange);
+        }
+
+        .header .icons div{
+            height: 4.5rem;
+            width: 4.5rem;
+            line-height: 4.5rem;
+            border-radius: .5rem;
+            background: #eee;
+            color:var(--black);
+            font-size: 2rem;
+            margin-left: .3rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .header .icons div:hover{
+            background: var(--orange);
+            color:#fff;
+        }
+
+        #menu-btn{
+            display: none;
+        }
+
+        .header .search-form{
+            position: absolute;
+            top:110%; right:-110%;
+            width: 50rem;
+            height:5rem;
+            background: #fff;
+            border-radius: .5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        .header .search-form.active{
+            right:2rem;
+            transition: .4s linear;
+        }
+
+        .header .search-form input{
+            height:100%;
+            width:100%;
+            background: none;
+            text-transform: none;
+            font-size: 1.6rem;
+            color:var(--black);
+            padding:0 1.5rem;
+        }
+
+        .header .search-form label{
+            font-size: 2.2rem;
+            padding-right: 1.5rem;
+            color:var(--black);
+            cursor: pointer;
+        }
+
+        .header .search-form label:hover{
+            color:var(--orange);
+        }
+
+        .header .shopping-cart{
+            position: absolute;
+            top:110%; right:-110%;
+            padding:1rem;
+            border-radius: .5rem;
+            box-shadow: var(--box-shadow);
+            width:35rem;
+            background: #fff;
+        }
+
+        .header .shopping-cart.active{
+            right:2rem;
+            transition: .4s linear;
+        }
+
+        .header .shopping-cart .box{
+            display: flex;
+            align-items: center;
+            gap:1rem;
+            position: relative;
+            margin:1rem 0;
+        }
+
+        .header .shopping-cart .box img{
+            height:10rem;
+        }
+
+        .header .shopping-cart .box .fa-trash{
+            font-size: 2rem;
+            position: absolute;
+            top:50%; right:2rem;
+            cursor: pointer;
+            color:var(--light-color);
+            transform: translateY(-50%);
+        }
+
+        .header .shopping-cart .box .fa-trash:hover{
+            color:var(--orange);
+        }
+
+        .header .shopping-cart .box .content h3{
+            color:var(--black);
+            font-size: 1.7rem;
+            padding-bottom: 1rem;
+        }
+
+        .header .shopping-cart .box .content span{
+            color:var(--light-color);
+            font-size: 1.6rem;
+        }
+
+        .header .shopping-cart .box .content .quantity{
+            padding-left: 1rem;
+        }
+
+        .header .shopping-cart .total{
+            font-size: 2.5rem;
+            padding:1rem 0;
+            text-align: center;
+            color:var(--black);
+        }
+
+        .header .shopping-cart .btn{
+            display: block;
+            text-align: center;
+            margin:1rem;
+        }
+
+        .header .login-form{
+            position: absolute;
+            top:110%; right:-110%;
+            width: 35rem;
+            box-shadow: var(--box-shadow);
+            padding:2rem;
+            border-radius: .5rem;
+            background: #fff;
+            text-align: center;
+        }
+
+        .header .login-form.active{
+            right:2rem;
+            transition: .4s linear;
+        }
+
+        .header .login-form h3{
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            color: var(--black);
+        }
+
+        .header .login-form .box{
+            width: 100%;
+            margin:.7rem 0;
+            background:#eee;
+            border-radius: .5rem;
+            padding:1rem;
+            font-size: 1.6rem;
+            color:var(--black);
+            text-transform: none;
+        }
+
+        .header .login-form p{
+            font-size: 1.4rem;
+            padding:.5rem 0;
+            color:var(--light-color);
+        }
+
+        .header .login-form p a{
+            color:var(--orange);
+            text-decoration: underline;
+        }
+
+        /* Home section styles */
+        .home{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url(../image/banner-bg.webp) no-repeat;
+            background-position: center;
+            background-size: cover;
+            padding-top: 17rem;
+            padding-bottom: 10rem;
+        }
+
+        .home .content{
+            text-align: center;
+            width:60rem;
+        }
+
+        .home .content h3{
+            color:var(--black);
+            font-size: 3rem;
+        }
+
+        .home .content h3 span{
+            color:var(--orange);
+        }
+
+        .home .content p{
+            color:var(--light-color);
+            font-size: 1.7rem;
+            padding:1rem 0;
+            line-height: 1.8;
+        }
+
+        /* Features section styles */
+        .features .box-container{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+            gap:1.5rem;
+        }
+
+        .features .box-container .box{
+            padding:3rem 2rem;
+            background: #fff;
+            outline: var(--outline);
+            outline-offset: -1rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        .features .box-container .box:hover{
+            outline: var(--outline-hover);
+            outline-offset: 0rem;
+        }
+
+        .features .box-container .box img{
+            margin:1rem 0;
+            height: 15rem;
+        }
+
+        .features .box-container .box h3{
+            font-size: 2.5rem;
+            line-height: 1.8;
+            color:var(--black);
+        }
+
+        .features .box-container .box p{
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color:var(--light-color);
+            padding:1rem 0;
+        }
+
+        /* Products section styles */
+        .products .product-slider{
+            padding:1rem;
+        }
+
+        .products .product-slider:first-child{
+            margin-bottom: 2rem;
+        }
+
+        .products .product-slider .box{
+            background: #fff;
+            border-radius: .5rem;
+            text-align: center;
+            padding:3rem 2rem;
+            outline-offset: -1rem;
+            outline: var(--outline);
+            box-shadow: var(--box-shadow);
+            transition: .2s linear;
+        }
+
+        .products .product-slider .box:hover{
+            outline-offset: 0rem;
+            outline: var(--outline-hover);
+        }
+
+        .products .product-slider .box img{
+            height:20rem;
+        }
+
+        .products .product-slider .box h3{
+            font-size: 2.5rem;
+            color:var(--black);
+        }
+
+        .products .product-slider .box .price{
+            font-size: 2rem;
+            color:var(--light-color);
+            padding:.5rem 0;
+        }
+
+        .products .product-slider .box .stars i{
+            font-size: 1.7rem;
+            color:var(--orange);
+            padding:.5rem 0;
+        }
+
+        /* Categories section styles */
+        .categories .box-container{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+            gap:1.5rem;
+        }
+
+        .categories .box-container .box{
+            padding:3rem 2rem;
+            border-radius: .5rem;
+            background:#fff;
+            box-shadow: var(--box-shadow);
+            outline:var(--outline);
+            outline-offset: -1rem;
+            text-align: center;
+        }
+
+        .categories .box-container .box:hover{
+            outline:var(--outline-hover);
+            outline-offset: 0rem;
+        }
+
+        .categories .box-container .box img{
+            margin:1rem 0;
+            height:15rem;
+        }
+
+        .categories .box-container .box h3{
+           font-size: 2rem;
+           color:var(--black);
+           line-height: 1.8;
+        }
+
+        .categories .box-container .box p{
+            font-size: 1.7rem;
+            color:var(--light-color);
+            line-height: 1.8;
+            padding:1rem 0;
+        }
+
+        /* Review section styles */
+        .review .review-slider{
+            padding:1rem;
+        }
+
+        .review .review-slider .box{
+            background: #fff;
+            border-radius: .5rem;
+            text-align: center;
+            padding:3rem 2rem;
+            outline-offset: -1rem;
+            outline: var(--outline);
+            box-shadow: var(--box-shadow);
+            transition: .2s linear;
+        }
+
+        .review .review-slider .box:hover{
+            outline:var(--outline-hover);
+            outline-offset: 0rem;
+        }
+
+        .review .review-slider .box img{
+            height:10rem;
+            width:10rem;
+            border-radius: 50%;
+        }
+
+        .review .review-slider .box p{
+            padding:1rem 0;
+            line-height: 1.8;
+            color:var(--light-color);
+            font-size: 1.5rem;
+        }
+
+        .review .review-slider .box h3{
+            padding-bottom: .5rem;
+            color:var(--black);
+            font-size: 2.2rem;
+        }
+
+        .review .review-slider .box .stars i{
+            color:var(--orange);
+            font-size: 1.7rem;
+        }
+
+        /* Blogs section styles */
+        .blogs .box-container{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+            gap:1.5rem;
+        }
+
+        .blogs .box-container .box{
+            overflow: hidden;
+            border-radius: .5rem;
+            box-shadow: var(--box-shadow);
+            background:#fff;
+        }
+
+        .blogs .box-container .box img{
+            height:25rem;
+            width:100%;
+            object-fit: cover;
+        }
+
+        .blogs .box-container .box .content{
+            padding:2rem;
+        }
+
+        .blogs .box-container .box .content .icons{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: var(--border);
+        }
+
+        .blogs .box-container .box .content .icons a{
+            color:var(--light-color);
+            font-size: 1.5rem;
+        }
+
+        .blogs .box-container .box .content .icons a:hover{
+            color:var(--black);
+        }
+
+        .blogs .box-container .box .content .icons a i{
+            color:var(--orange);
+            padding-right: .5rem;
+        }
+
+        .blogs .box-container .box .content h3{
+            line-height: 1.8;
+            color:var(--black);
+            font-size: 2.2rem;
+            padding:.5rem 0;
+        }
+
+        .blogs .box-container .box .content p{
+            line-height: 1.8;
+            color:var(--light-color);
+            font-size: 1.5rem;
+            padding:.5rem 0;
+        }
+
+        /* Footer section styles */
+        .footer{
+            background: #fff;
+        }
+
+        .footer .box-container{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+            gap:1.5rem;
+        }
+
+        .footer .box-container .box h3{
+            font-size: 2.5rem;
+            color:var(--black);
+            padding:1rem 0;
+        }
+
+        .footer .box-container .box h3 i{
+            color:var(--orange);
+        }
+
+        .footer .box-container .box .links{
+            display: block;
+            font-size: 1.5rem;
+            color:var(--light-color);
+            padding:1rem 0;
+        }
+
+        .footer .box-container .box .links i{
+            color:var(--orange);
+            padding-right: .5rem;
+        }
+
+        .footer .box-container .box .links:hover i{
+            padding-right: 2rem;
+        }
+
+        .footer .box-container .box p{
+            line-height: 1.8;
+            font-size: 1.5rem;
+            color:var(--light-color);
+            padding:1rem 0;
+        }
+
+        .footer .box-container .box .share a{
+            height:4rem;
+            width:4rem;
+            line-height:4rem;
+            border-radius: .5rem;
+            font-size: 2rem;
+            color:var(--black);
+            margin-right: .2rem;
+            background: #eee;
+            text-align: center;
+        }
+
+        .footer .box-container .box .share a:hover{
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .footer .box-container .box .email{
+            width: 100%;
+            margin:.7rem 0;
+            padding:1rem;
+            border-radius: .5rem;
+            background: #eee;
+            font-size: 1.6rem;
+            color:var(--black);
+            text-transform: none;
+        }
+
+        .footer .box-container .box .payment-img{
+            margin-top: 2rem;
+            height: 3rem;
+        }
+
+        .footer .credit{
+            text-align: center;
+            margin-top: 2rem;
+            padding:1rem;
+            padding-top: 2.5rem;
+            font-size: 2rem;
+            color:var(--black);
+            border-top: var(--border);
+        }
+
+        .footer .credit span{
+            color:var(--orange);
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width:991px){
+            html{
+                font-size: 55%;
+            }
+
+            .header{
+                padding:2rem;
+            }
+
+            section{
+                padding:2rem;
+            }
+        }
+
+        @media (max-width:768px){
+            #menu-btn{
+                display: inline-block;
+            }
+
+            .header .search-form{
+                width: 90%;
+            }
+
+            .header .navbar{
+                position: absolute;
+                top:110%; right:-110%;
+                width:30rem;
+                box-shadow: var(--box-shadow);
+                border-radius: .5rem;
+                background: #fff;
+            }
+
+            .header .navbar.active{
+                right:2rem;
+                transition: .4s linear;
+            }
+
+            .header .navbar a{
+                font-size: 2rem;
+                margin:2rem 2.5rem;
+                display: block;
+            }
+        }
+
+        @media (max-width:450px){
+            html{
+                font-size: 50%;
+            }
+
+            .heading{
+                font-size: 2.5rem;
+            }
+
+            .footer{
+                text-align: center;
+            }
+
+            .footer .box-container .box .payment-img{
+               margin: 2rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Section Starts -->
+<header class="header">
+
+    <a href="#" class="logo"> <i class="fas fa-shopping-basket"></i> groco </a>
+
+    <nav class="navbar">
+        <a href="#home">home</a>
+        <a href="#features">features</a>
+        <a href="products.html">products</a>
+        <a href="#categories">categories</a>
+        <a href="#review">review</a>
+        <a href="#blogs">blogs</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+        <div class="fas fa-search" id="search-btn"></div>
+        <a href="cart.html" class="cart-icon">
+            <i class="fas fa-shopping-cart" id="cart-btn"></i>
+            <span class="cart-count">0</span>
+        </a>
+        <div class="fas fa-user" id="login-btn"></div>
+    </div>
+
+    <form action="" class="search-form">
+        <input type="search" id="search-box" placeholder="search here...">
+        <label for="search-box" class="fas fa-search"></label>
+    </form>
+
+    <div class="shopping-cart">
+        <div class="box">
+            <i class="fas fa-trash"></i>
+            <img src="image/products/watermelon.png" alt="watermelon">
+            <div class="content">
+                <h3>watermelon</h3>
+                <span class="price">₹56/-</span>
+                <span class="quantity">qty : 1</span>
+            </div>
+        </div>
+        <div class="box">
+            <i class="fas fa-trash"></i>
+            <img src="image/products/onion.png" alt="onion">
+            <div class="content">
+                <h3>onion</h3>
+                <span class="price">₹80/-</span>
+                <span class="quantity">qty : 1</span>
+            </div>
+        </div>
+        <div class="box">
+            <i class="fas fa-trash"></i>
+            <img src="image/products/chicken_meat.png" alt="chicken">
+            <div class="content">
+                <h3>chicken</h3>
+                <span class="price">₹110/-</span>
+                <span class="quantity">qty : 1</span>
+            </div>
+        </div>
+        <div class="total"> total : ₹246/- </div>
+        <a href="cart.html" class="btn">checkout</a>
+    </div>
+
+    <form action="" class="login-form">
+        <h3>login now</h3>
+        <input type="email" placeholder="your email" class="box" id="login-email">
+        <input type="password" placeholder="your password" class="box" id="login-password">
+        <p>forget your password <a href="forgot-password.html">click here</a></p>
+        <p>don't have an account <a href="signup.html">create now</a></p>
+        <input type="submit" value="login now" class="btn" id="login-submit">
+        <div class="logout-section" style="display: none;">
+            <p>Logged in as: <span id="logged-in-email"></span></p>
+            <button type="button" class="btn" id="logout-btn">Logout</button>
+        </div>
+    </form>
+
+</header>
+<!-- Header Section Ends -->
+
+<!-- Home Section Starts -->
+<section class="home" id="home">
+
+    <div class="content">
+        <h3>fresh and <span>organic</span> products for your</h3>
+        <p>Discover the finest selection of farm-fresh fruits, vegetables, meats, and dairy products. We bring you the best quality groceries sourced directly from trusted farmers and suppliers.</p>
+        <a href="products.html" class="btn">shop now</a>
+    </div>
+
+</section>
+<!-- Home Section Ends -->
+
+<!-- Features Section Starts -->
+<section class="features" id="features">
+
+    <h1 class="heading"> our <span>features</span> </h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <img src="image/basic/fresh.png" alt="Fresh">
+            <h3>fresh and organic</h3>
+            <p>Our products are sourced directly from local farms, ensuring you get the freshest and most nutritious items. We maintain strict quality standards for all our organic produce.</p>
+            <a href="#" class="btn">read more</a>
+        </div>
+
+        <div class="box">
+            <img src="image/basic/delivery.png" alt="Delivery">
+            <h3>free delivery</h3>
+            <p>Enjoy free delivery on all orders above ₹500. Our efficient delivery system ensures your groceries reach you fresh and on time, every time.</p>
+            <a href="#" class="btn">read more</a>
+        </div>
+
+        <div class="box">
+            <img src="image/basic/payment.png" alt="Payment">
+            <h3>easy payments</h3>
+            <p>We offer multiple secure payment options including UPI, credit/debit cards, net banking, and cash on delivery for your convenience.</p>
+            <a href="#" class="btn">read more</a>
+        </div>
+
+    </div>
+
+</section>
+<!-- Features Section Ends -->
+
+<!-- Products Section Starts -->
+<section class="products" id="products">
+
+    <h1 class="heading"> our <span>products</span> </h1>
+
+    <div class="swiper product-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/products/orange.png" alt="orange">
+                <h3>fresh orange</h3>
+                <div class="price">₹100</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/products/apple.png" alt="apple">
+                <h3>fresh apple</h3>
+                <div class="price">₹120</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/products/chicken_meat.png" alt="chicken">
+                <h3>fresh meat</h3>
+                <div class="price">₹110</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/products/cabbage.png" alt="cabbage">
+                <h3>fresh cabbage</h3>
+                <div class="price">₹120</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="swiper product-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/products/potato.png" alt="potato">
+                <h3>fresh potato</h3>
+                <div class="price">₹100</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/products/avacoades.png" alt="avocado">
+                <h3>fresh avocado</h3>
+                <div class="price">₹120</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/products/carrot.png" alt="carrot">
+                <h3>fresh carrot</h3>
+                <div class="price">₹100</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/products/lemon.png" alt="lemon">
+                <h3>green lemon</h3>
+                <div class="price">₹120</div>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn">add to cart</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- Products Section Ends -->
+
+<!-- Categories Section Starts -->
+<section class="categories" id="categories">
+
+    <h1 class="heading"> product <span>categories</span> </h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <img src="image/categories/vegtables.png" alt="vegitables">
+            <h3>vegitables</h3>
+            <p>upto 45% off</p>
+            <a href="#" class="btn">shop now</a>
+        </div>
+
+        <div class="box">
+            <img src="image/categories/fruits.png" alt="fruits">
+            <h3>fresh fruits</h3>
+            <p>upto 45% off</p>
+            <a href="#" class="btn">shop now</a>
+        </div>
+
+        <div class="box">
+            <img src="image/categories/dairy_products.png" alt="dairy">
+            <h3>dairy products</h3>
+            <p>upto 45% off</p>
+            <a href="#" class="btn">shop now</a>
+        </div>
+
+        <div class="box">
+            <img src="image/categories/meat.png" alt="meat">
+            <h3>fresh meat</h3>
+            <p>upto 45% off</p>
+            <a href="#" class="btn">shop now</a>
+        </div>
+
+    </div>
+
+</section>
+<!-- Categories Section Ends -->
+
+<!-- Review Section Starts -->
+<section class="review" id="review">
+
+    <h1 class="heading"> customer's <span>review</span> </h1>
+
+    <div class="swiper review-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/user/tejas.png" alt="tejas">
+                <p>"I've been ordering from Groco for the past 6 months, and I'm extremely satisfied with their service. The fruits and vegetables are always fresh, and the delivery is prompt."</p>
+                <h3>Tejas Badhe</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/user/nityanand.png" alt="nityanand">
+                <p>"The quality of organic products at Groco is exceptional. Their customer service is excellent, and I love the convenience of getting fresh groceries delivered to my doorstep."</p>
+                <h3>Nityanand</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/user/parth.png" alt="parth">
+                <p>"Groco has made grocery shopping so much easier for me. The app is user-friendly, and I can track my orders in real-time. Highly recommended!"</p>
+                <h3>Parth</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/user/suraj.png" alt="suraj">
+                <p>"The variety of products available is impressive. I especially love their organic section and the quality of their dairy products. Great service overall!"</p>
+                <h3>Suraj</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- Review Section Ends -->
+
+<!-- Blogs Section Starts -->
+<section class="blogs" id="blogs">
+
+    <h1 class="heading"> our <span>blogs</span> </h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <img src="image/products/orange.png" alt="orange">
+            <div class="content">
+                <div class="icons">
+                    <a href="#"> <i class="fas fa-user"></i> by admin </a>
+                    <a href="#"> <i class="fas fa-calendar"></i> 1st may, 2024 </a>
+                </div>
+                <h3>Benefits of Fresh and Organic Vegetables</h3>
+                <p>Learn about the health benefits of consuming fresh and organic vegetables, and how they contribute to a balanced diet and overall well-being.</p>
+                <a href="#" class="btn">read more</a>
+            </div>
+        </div>
+
+        <div class="box">
+            <img src="image/products/apple.png" alt="apple">
+            <div class="content">
+                <div class="icons">
+                    <a href="#"> <i class="fas fa-user"></i> by admin </a>
+                    <a href="#"> <i class="fas fa-calendar"></i> 1st may, 2024 </a>
+                </div>
+                <h3>Seasonal Fruits and Their Nutritional Value</h3>
+                <p>Discover the nutritional benefits of seasonal fruits and how incorporating them into your diet can boost your immune system and overall health.</p>
+                <a href="#" class="btn">read more</a>
+            </div>
+        </div>
+
+        <div class="box">
+            <img src="image/products/chicken_meat.png" alt="chicken">
+            <div class="content">
+                <div class="icons">
+                    <a href="#"> <i class="fas fa-user"></i> by admin </a>
+                    <a href="#"> <i class="fas fa-calendar"></i> 1st may, 2024 </a>
+                </div>
+                <h3>Quality Standards in Meat Processing</h3>
+                <p>Explore our commitment to quality in meat processing and how we ensure the highest standards of hygiene and freshness in our products.</p>
+                <a href="#" class="btn">read more</a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<!-- Blogs Section Ends -->
+
+<!-- Footer Section Starts -->
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3> groco <i class="fas fa-shopping-basket"></i> </h3>
+            <p>Your trusted partner for fresh and organic groceries. We are committed to providing high-quality products sourced directly from local farmers and trusted suppliers.</p>
+            <div class="share">
+                <a href="#" class="fab fa-facebook-f"></a>
+                <a href="#" class="fab fa-twitter"></a>
+                <a href="#" class="fab fa-instagram"></a>
+                <a href="#" class="fab fa-linkedin"></a>
+            </div>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <a href="#" class="links"> <i class="fas fa-phone"></i> +91-98765-43210 </a>
+            <a href="#" class="links"> <i class="fas fa-phone"></i> +91-87654-32109 </a>
+            <a href="#" class="links"> <i class="fas fa-envelope"></i> support@groco.com </a>
+            <a href="#" class="links"> <i class="fas fa-map-marker-alt"></i> Pune, Maharashtra - 411001 </a>
+        </div>
+
+        <div class="box">
+            <h3>quick links</h3>
+            <a href="#home" class="links"> <i class="fas fa-arrow-right"></i> home </a>
+            <a href="#features" class="links"> <i class="fas fa-arrow-right"></i> features </a>
+            <a href="#products" class="links"> <i class="fas fa-arrow-right"></i> products </a>
+            <a href="#categories" class="links"> <i class="fas fa-arrow-right"></i> categories </a>
+            <a href="#review" class="links"> <i class="fas fa-arrow-right"></i> review </a>
+            <a href="#blogs" class="links"> <i class="fas fa-arrow-right"></i> blogs </a>
+        </div>
+
+        <div class="box">
+            <h3>newsletter</h3>
+            <p>Subscribe to our newsletter for updates on new products, special offers, and seasonal discounts.</p>
+            <input type="email" placeholder="your email" class="email">
+            <input type="submit" value="subscribe" class="btn">
+            <img src="image/payment.png" class="payment-img" alt="Payment Methods">
+        </div>
+
+    </div>
+
+
+</section>
+<!-- Footer Section Ends -->
+
+
+<!-- Swiper JS CDN Link -->
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<!-- Custom JS File Link -->
+<script src="js/script.js"></script>
+
+<script>
+    let searchForm = document.querySelector('.search-form');
+    let shoppingCart = document.querySelector('.shopping-cart');
+    let loginForm = document.querySelector('.login-form');
+    let navbar = document.querySelector('.navbar');
+
+    document.querySelector('#search-btn').onclick = () =>{
+        searchForm.classList.toggle('active');
+        shoppingCart.classList.remove('active');
+        loginForm.classList.remove('active');
+        navbar.classList.remove('active');
+    }
+
+    document.querySelector('#cart-btn').onclick = () =>{
+        shoppingCart.classList.toggle('active');
+        searchForm.classList.remove('active');
+        loginForm.classList.remove('active');
+        navbar.classList.remove('active');
+    }
+
+    document.querySelector('#login-btn').onclick = () =>{
+        loginForm.classList.toggle('active');
+        searchForm.classList.remove('active');
+        shoppingCart.classList.remove('active');
+        navbar.classList.remove('active');
+    }
+
+    document.querySelector('#menu-btn').onclick = () =>{
+        navbar.classList.toggle('active');
+        searchForm.classList.remove('active');
+        shoppingCart.classList.remove('active');
+        loginForm.classList.remove('active');
+    }
+
+    window.onscroll = () =>{
+        searchForm.classList.remove('active');
+        shoppingCart.classList.remove('active');
+        loginForm.classList.remove('active');
+        navbar.classList.remove('active');
+    }
+
+    // Swiper JS Initialization for Product Slider
+    var swiper = new Swiper(".product-slider", {
+        loop:true,
+        spaceBetween: 20,
+        autoplay: {
+            delay: 7500,
+            disableOnInteraction: false,
+        },
+        centeredSlides: true,
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+          },
+          768: {
+            slidesPerView: 2,
+          },
+          1020: {
+            slidesPerView: 3,
+          },
+        },
+    });
+
+    // Swiper JS Initialization for Review Slider
+    var swiper = new Swiper(".review-slider", {
+        loop:true,
+        spaceBetween: 20,
+        autoplay: {
+            delay: 7500,
+            disableOnInteraction: false,
+        },
+        centeredSlides: true,
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+          },
+          768: {
+            slidesPerView: 2,
+          },
+          1020: {
+            slidesPerView: 3,
+          },
+        },
+    });
+
+    // Check if user is logged in
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const loginForm = document.querySelector('.login-form');
+        const loginSection = loginForm.querySelectorAll('input:not(#login-submit), p');
+        const logoutSection = document.querySelector('.logout-section');
+        const loggedInEmail = document.getElementById('logged-in-email');
+        
+        if (isLoggedIn) {
+            loginSection.forEach(element => {
+                element.style.display = 'none';
+            });
+            document.getElementById('login-submit').style.display = 'none';
+            logoutSection.style.display = 'block';
+            loggedInEmail.textContent = localStorage.getItem('userEmail');
+        } else {
+            loginSection.forEach(element => {
+                element.style.display = 'block';
+            });
+            document.getElementById('login-submit').style.display = 'block';
+            logoutSection.style.display = 'none';
+        }
+    }
+
+    // Handle login form submission
+    document.getElementById('login-submit').addEventListener('click', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        if (!email || !password) {
+            alert('Please enter both email and password');
+            return;
+        }
+        
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', email);
+        
+        checkLoginStatus();
+        alert('Login successful!');
+    });
+
+    // Handle logout
+    document.getElementById('logout-btn').addEventListener('click', function() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userEmail');
+        checkLoginStatus();
+        alert('Logged out successfully!');
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        checkLoginStatus();
+    });
+
+    // Update cart count function
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartCount = document.querySelector('.cart-count');
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
+
+    // Update add to cart functionality
+    document.querySelectorAll('.products .btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productCard = this.closest('.box');
+            const product = {
+                name: productCard.querySelector('h3').textContent,
+                price: parseInt(productCard.querySelector('.price').textContent.replace('₹', '')),
+                image: productCard.querySelector('img').src,
+                quantity: 1
+            };
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.name === product.name);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push(product);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            updateCartCount();
+            
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span>Added to cart!</span>
+            `;
+            document.body.appendChild(successMessage);
+
+            setTimeout(() => {
+                successMessage.remove();
+            }, 2000);
+        });
+    });
+
+    // Initialize cart count on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartCount();
+    });
+</script>
+
+</body>
+</html>
