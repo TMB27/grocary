@@ -407,10 +407,39 @@
             margin-bottom: 2rem;
         }
 
+        .summary-items-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            border-bottom: var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .summary-item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+            color: var(--light-color);
+        }
+
+        .summary-item-row .item-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .summary-item-row .item-total {
+            margin-left: 1rem;
+            color: var(--black);
+            font-weight: bold;
+        }
+
         .summary-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-size: 1.6rem;
             color: var(--light-color);
         }
@@ -781,23 +810,26 @@
 
         <div class="cart-summary">
             <h3>Order Summary</h3>
+            <div class="summary-items-list">
+                <!-- Individual items will be added here -->
+            </div>
             <div class="summary-item">
                 <span>Subtotal</span>
                 <span id="subtotal">₹0</span>
             </div>
             <div class="summary-item">
                 <span>Shipping</span>
-                <span>Free</span>
+                <span id="shipping">Free</span>
             </div>
             <div class="summary-item">
-                <span>Tax</span>
+                <span>Tax (18%)</span>
                 <span id="tax">₹0</span>
             </div>
             <div class="summary-item total">
-                <span>Total</span>
+                <span>Total Amount</span>
                 <span id="total">₹0</span>
             </div>
-            <a href="#" class="btn" id="checkout-btn">Proceed to Checkout</a>
+            <a href="" class="btn checkout-btn" id="checkout-btn">Proceed to Checkout</a>
         </div>
     </div>
 </section>
@@ -888,7 +920,7 @@
                 </div>
                 <div class="item-details">
                     <h3>${item.name}</h3>
-                    <div class="item-price">₹${item.price}</div>
+                    <div class="item-price">₹${item.price}/unit</div>
                     <div class="item-quantity">
                         <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
                         <span>${item.quantity}</span>
@@ -916,6 +948,7 @@
         
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCart();
+        updateCartCount();
     }
     
     function removeItem(index) {
@@ -923,23 +956,70 @@
         cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCart();
+        updateCartCount();
     }
     
     function updateTotals() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const summaryItemsList = document.querySelector('.summary-items-list');
+        summaryItemsList.innerHTML = '';
+
+        // Add individual items to summary
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            const itemRow = document.createElement('div');
+            itemRow.className = 'summary-item-row';
+            itemRow.innerHTML = `
+                <span class="item-name">${item.name} (${item.quantity} x ₹${item.price})</span>
+                <span class="item-total">₹${itemTotal}</span>
+            `;
+            summaryItemsList.appendChild(itemRow);
+        });
+
         const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const shipping = 50; // Fixed shipping cost
-        const tax = subtotal * 0.18; // 18% tax
-        
-        document.querySelector('.summary-item:nth-child(1) span:last-child').textContent = `₹${subtotal}`;
-        document.querySelector('.summary-item:nth-child(2) span:last-child').textContent = `₹${shipping}`;
-        document.querySelector('.summary-item:nth-child(3) span:last-child').textContent = `₹${tax.toFixed(2)}`;
-        document.querySelector('.summary-item.total span:last-child').textContent = `₹${(subtotal + shipping + tax).toFixed(2)}`;
+        const shipping = subtotal > 500 ? 0 : 50;
+        const tax = subtotal * 0.18;
+        const total = subtotal + shipping + tax;
+
+        document.getElementById('subtotal').textContent = `₹${subtotal}`;
+        document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `₹${shipping}`;
+        document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
+        document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
     }
+
+    // Update cart count in header
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartCount = document.querySelector('.cart-count');
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
+    
+    // Handle checkout
+    document.getElementById('checkout-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        
+        if (!isLoggedIn) {
+            alert('Please login first to proceed to checkout');
+            document.querySelector('#login-btn').click();
+            return;
+        }
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert('Your cart is empty. Please add items to proceed.');
+            return;
+        }
+
+        // Redirect to payment page
+        window.location.href = 'payment.html';
+    });
     
     // Initialize cart on page load
     document.addEventListener('DOMContentLoaded', () => {
         updateCart();
+        updateCartCount();
     });
 
     // Login functionality
@@ -994,6 +1074,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         checkLoginStatus();
         updateCart();
+        updateCartCount();
     });
 </script>
 

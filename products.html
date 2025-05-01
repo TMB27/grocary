@@ -653,7 +653,7 @@
         <div class="product-card" data-category="fruits">
             <img src="image/products/orange.png" alt="orange">
             <h3>fresh orange</h3>
-            <div class="price">₹100</div>
+            <div class="price">₹120/kg</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -661,13 +661,13 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
 
         <div class="product-card" data-category="fruits">
             <img src="image/products/apple.png" alt="apple">
             <h3>fresh apple</h3>
-            <div class="price">₹120</div>
+            <div class="price">₹150/kg</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -675,14 +675,14 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
 
         <!-- Vegetables -->
         <div class="product-card" data-category="vegetables">
             <img src="image/products/cabbage.png" alt="cabbage">
             <h3>fresh cabbage</h3>
-            <div class="price">₹120</div>
+            <div class="price">₹40/kg</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -690,13 +690,13 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
 
         <div class="product-card" data-category="vegetables">
             <img src="image/products/potato.png" alt="potato">
             <h3>fresh potato</h3>
-            <div class="price">₹100</div>
+            <div class="price">₹30/kg</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -704,13 +704,13 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
 
         <div class="product-card" data-category="vegetables">
             <img src="image/products/carrot.png" alt="carrot">
             <h3>fresh carrot</h3>
-            <div class="price">₹100</div>
+            <div class="price">₹50/kg</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -718,14 +718,14 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
 
         <!-- Meat -->
         <div class="product-card" data-category="meat">
             <img src="image/products/chicken_meat.png" alt="chicken">
             <h3>fresh chicken</h3>
-            <div class="price">₹110/-</div>
+            <div class="price">₹200/kg</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -733,14 +733,14 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
 
         <!-- Dairy -->
         <div class="product-card" data-category="dairy">
             <img src="image/products/milk.png" alt="milk">
             <h3>fresh milk</h3>
-            <div class="price">₹60/-</div>
+            <div class="price">₹60/liter</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -748,13 +748,13 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
 
         <div class="product-card" data-category="dairy">
             <img src="image/products/cheese.png" alt="cheese">
             <h3>fresh cheese</h3>
-            <div class="price">₹150/-</div>
+            <div class="price">₹300/kg</div>
             <div class="stars">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -762,7 +762,7 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
             </div>
-            <a href="#" class="btn">add to cart</a>
+            <a href="#" class="btn add-to-cart-btn">add to cart</a>
         </div>
     </div>
 </section>
@@ -831,11 +831,19 @@
         cartCount.textContent = totalItems;
     }
 
-    // Add to cart functionality
+    // Add to cart functionality with login check
     function addToCart(productCard) {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        
+        if (!isLoggedIn) {
+            alert('Please login first to add items to cart');
+            document.querySelector('#login-btn').click();
+            return;
+        }
+
         const product = {
             name: productCard.querySelector('h3').textContent,
-            price: parseInt(productCard.querySelector('.price').textContent),
+            price: parseInt(productCard.querySelector('.price').textContent.replace(/[^0-9]/g, '')),
             image: productCard.querySelector('img').src,
             quantity: 1
         };
@@ -870,7 +878,7 @@
     }
 
     // Add click event to all add to cart buttons
-    document.querySelectorAll('.product-card .btn').forEach(button => {
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             addToCart(this.closest('.product-card'));
